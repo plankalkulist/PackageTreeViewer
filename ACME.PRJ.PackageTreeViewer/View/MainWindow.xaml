@@ -1,0 +1,193 @@
+﻿<Window x:Class="ACME.PRJ.PackageTreeViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:viewModels="clr-namespace:ACME.PRJ.PackageTreeViewer.ViewModel"
+        xmlns:local="clr-namespace:ACME.PRJ.PackageTreeViewer"
+		xmlns:toolkit="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+		mc:Ignorable="d"
+		DataContext="{StaticResource MainWindowViewModel}"
+        Title="Package Tree Viewer" Height="795" Width="1285" WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition Height="*"></RowDefinition>
+			<RowDefinition Height="Auto"></RowDefinition>
+		</Grid.RowDefinitions>
+
+		<Expander Grid.Row="0" Header="Ветки" IsEnabled="{Binding IsTreeReady}"
+				  Margin="2" BorderThickness="1" BorderBrush="#80000000" Padding="2">
+			<StackPanel Orientation="Vertical"
+						HorizontalAlignment="Stretch">
+
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"></RowDefinition>
+						<RowDefinition Height="*"></RowDefinition>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"></ColumnDefinition>
+						<ColumnDefinition Width="*"></ColumnDefinition>
+					</Grid.ColumnDefinitions>
+
+					<Label Grid.Row="0" Grid.Column="0" Content="Поиск веток:" Margin="15 0 0 0"/>
+
+					<TextBox Grid.Row="0" Grid.Column="1"
+							 Text="{Binding BranchFilterField, UpdateSourceTrigger=PropertyChanged}"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5 2 15 0"/>
+
+					<Label Grid.Row="1" Grid.Column="0" Content="Поиск веток для сравнения:" Visibility="{Binding DiffVisibility}"
+						   Margin="15 0 0 0"/>
+
+					<TextBox Grid.Row="1" Grid.Column="1" Visibility="{Binding DiffVisibility}"
+							 Text="{Binding DiffBranchFilterField, UpdateSourceTrigger=PropertyChanged}"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5 2 15 0"/>
+				</Grid>
+
+				<ItemsControl ItemsSource="{Binding Path=Tree}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<GroupBox Header="{Binding Name}">
+								<ItemsControl ItemsSource="{Binding Nodes}">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel Width="Auto" ItemWidth="Auto" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<DockPanel HorizontalAlignment="Center" MinWidth="300" Margin="5">
+
+												<Label Content="{Binding Path=ValidViewedName}"
+													   HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="80" />
+
+												<DockPanel Margin="5" VerticalAlignment="Center">
+													
+													<ComboBox ItemsSource="{Binding Path=AllBranches}" SelectedItem="{Binding Path=BranchChangeTo, Mode=TwoWay}"
+															  DisplayMemberPath="Name" SelectedValuePath="Key"
+															  VerticalAlignment="Center" MinWidth="70" />
+
+													<Label Content="&lt;&gt;" Visibility="{Binding Path=DiffVisibility}" VerticalAlignment="Center" />
+
+													<ComboBox ItemsSource="{Binding Path=AllBranches}" SelectedItem="{Binding Path=DiffBranchChangeTo, Mode=TwoWay}"
+															DisplayMemberPath="Name" SelectedValuePath="Key"
+															Visibility="{Binding Path=DiffVisibility}" MinWidth="70" VerticalAlignment="Center" />
+												</DockPanel>
+											</DockPanel>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</GroupBox>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Right">
+					
+					<CheckBox Content="Режим сравнения (beta)" IsChecked="{Binding IsDiffMode}"
+							  VerticalAlignment="Center" Margin="20 5"/>
+
+					<Button Content="Перейти на выбранные ветки" Command="{Binding UpdateSolutions}"
+							HorizontalAlignment="Right" VerticalAlignment="Center" Width="Auto" Margin="5" Padding="3 0"/>
+				</StackPanel>
+			</StackPanel>
+		</Expander>
+
+		<Grid Grid.Row="1" Margin="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.45*" MinWidth="100"></ColumnDefinition>
+				<ColumnDefinition Width="Auto"></ColumnDefinition>
+				<ColumnDefinition Width="0.55*" MinWidth="100"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"></RowDefinition>
+					<RowDefinition Height="*"></RowDefinition>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"></RowDefinition>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"></ColumnDefinition>
+						<ColumnDefinition Width="*"></ColumnDefinition>
+					</Grid.ColumnDefinitions>
+
+					<Image Grid.Column="0" Source="/Resources/Search_16xSM.png"
+						   Width="16" Height="16" Margin="10 0 0 0"/>
+
+					<TextBox Grid.Column="1" IsEnabled="{Binding IsTreeLoadedWithSolutions}"
+							 Text="{Binding ReferenceFilterField, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" />
+				</Grid>
+
+				<ListView Grid.Row="1" IsEnabled="{Binding IsTreeLoadedWithSolutions}"
+						  ItemsSource="{Binding Path=FilteredReferences}" SelectedItem="{Binding Path=SelectedReference}"
+                          VerticalAlignment="Stretch" SelectionMode="Single" />
+			</Grid>
+
+			<GridSplitter Grid.Column="1" ShowsPreview="False"
+						  Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+			<TreeView Grid.Column="2" ItemsSource="{Binding Path=Tree}">
+				<TreeView.ItemContainerStyle>
+					<Style TargetType="{x:Type TreeViewItem}">
+						<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+						<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+						<Setter Property="Visibility" Value="{Binding Visibility}" />
+						<Setter Property="FontWeight" Value="Normal" />
+						<Style.Triggers>
+							<Trigger Property="IsSelected" Value="True">
+								<Setter Property="FontWeight" Value="Bold" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</TreeView.ItemContainerStyle>
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
+						<StackPanel Orientation="Horizontal" Background="{Binding BackgroundColor}">
+
+							<Image Source="{Binding ImageUri}"
+								   Width="16" Height="16" />
+
+							<TextBlock Text="{Binding Title}" Foreground="{Binding DiffState, Converter={StaticResource DiffStateToColorConverter}}"
+									   VerticalAlignment="Center" Margin="5, 0, 20, 0" />
+
+							<TextBlock Text="{Binding Tags, Converter={StaticResource TagsCollectionToStringConverter}}"
+									   Foreground="Gray" VerticalAlignment="Center" Margin="5, 0, 5, 0" />
+
+							<TextBlock Text="{Binding Error}" IsEnabled="{Binding NotSuccess}"
+									   Foreground="Red" VerticalAlignment="Center" Margin="5, 0, 20, 0" />
+						</StackPanel>
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
+		</Grid>
+
+		<DockPanel Grid.Row="2" Height="Auto">
+			<StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+
+				<StatusBarItem>
+					<Label Grid.Row="0" VerticalAlignment="Bottom" Content="{Binding Path=TreeLoadingProgressText}" />
+				</StatusBarItem>
+
+				<StatusBarItem HorizontalAlignment="Right">
+					<ProgressBar Value="{Binding Path=TreeLoadingProgressPercentage}" Visibility="{Binding Path=ProgressBarVisibility}"
+								 Width="100" Height="15" Margin="5 0"/>
+				</StatusBarItem>
+			</StatusBar>
+		</DockPanel>
+	</Grid>
+</Window>
