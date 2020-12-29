@@ -10,7 +10,7 @@ using System.Windows.Media;
 namespace ACME.PRJ.PackageTreeViewer.Model
 {
 	/// <summary>
-	/// Узел дерева (не должен зависеть от типа Data)
+	/// Узел дерева (должен не зависеть от типа Data)
 	/// </summary>
 	public class Node : INotifyPropertyChanged
 	{

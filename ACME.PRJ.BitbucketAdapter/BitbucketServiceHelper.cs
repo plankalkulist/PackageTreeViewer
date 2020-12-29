@@ -11,6 +11,12 @@ namespace ACME.PRJ.BitbucketAdapter
 {
 	internal static class BitbucketServiceHelper
 	{
+        /// <summary>
+        /// Генерация строки авторизации в Bitbucket
+        /// </summary>
+        /// <param name="username">Логин</param>
+        /// <param name="password">Пароль</param>
+        /// <returns></returns>
 		internal static string GetEncodedAuthString(string username, string password)
 		{
 			var authString = $"{username}:{password}";
@@ -18,6 +24,13 @@ namespace ACME.PRJ.BitbucketAdapter
 			return encodedAuthString;
 		}
 
+        /// <summary>
+        /// Запрос и получение ответа от Bitbucket'а
+        /// </summary>
+        /// <param name="encodedAuthString">Строка авторизации</param>
+        /// <param name="url">URL запроса</param>
+        /// <param name="parameters">Параметры запроса</param>
+        /// <returns></returns>
 		internal static string GetResponse(string encodedAuthString, string url, string parameters = null)
 		{
 			if (string.IsNullOrWhiteSpace(url))
@@ -57,6 +70,13 @@ namespace ACME.PRJ.BitbucketAdapter
 			return responseJson;
 		}
 
+        /// <summary>
+        /// Получение списка значений ответа на запрос
+        /// </summary>
+        /// <typeparam name="T">Ожидаемый тип значений</typeparam>
+        /// <param name="encodedAuthString">Строка авторизации</param>
+        /// <param name="url">URL запроса</param>
+        /// <param name="parameters">Параметры запроса</param>
 		internal static IEnumerable<T> GetValues<T>(string encodedAuthString, string url, string parameters = null)
 		{
 			IEnumerable<T> result = null;
@@ -77,6 +97,10 @@ namespace ACME.PRJ.BitbucketAdapter
 			return result;
 		}
 
+        /// <summary>
+        /// Нормализация строки запроса, чтобы Bitbucket не подавился
+        /// </summary>
+        /// <param name="url">URL запроса</param>
 		private static string NormalizeUrl(string url)
 		{
 			return url

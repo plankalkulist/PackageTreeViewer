@@ -37,10 +37,6 @@ namespace ACME.PRJ.CodebaseCommons
 				content = null;
 				return false;
 			}
-			catch (Exception e)//////////////////////////////////////////////////////////
-			{
-				throw;
-			}
 		}
 
 		public static bool TryGetSourceFileContentIfExists(this ICodebaseService codebaseService, SourceItemInfo fileInfo, out string content)

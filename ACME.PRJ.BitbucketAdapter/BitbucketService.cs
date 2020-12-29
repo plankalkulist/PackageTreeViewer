@@ -7,6 +7,9 @@ using ACME.PRJ.CodebaseCommons;
 
 namespace ACME.PRJ.BitbucketAdapter
 {
+    /// <summary>
+    /// Сервис для получения данных с Bitbucket'а
+    /// </summary>
 	public class BitbucketService : ICodebaseService
 	{
 		public string BaseUrl { get; private set; }

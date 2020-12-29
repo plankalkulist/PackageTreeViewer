@@ -1,9 +1,9 @@
 ﻿namespace ACME.PRJ.CodebaseCommons
 {
-	/// <summary>
-	/// Инфо о проекте (напр. УФО, СКР и тд)
-	/// </summary>
-	public class ProjectInfo : InfoBase
+    /// <summary>
+    /// Инфо о проекте (= совокупности репозиториев, собираемых(build) и разворачиваемых(deploy) вместе)
+    /// </summary>
+    public class ProjectInfo : InfoBase
 	{
         public string Description { get; set; }
 

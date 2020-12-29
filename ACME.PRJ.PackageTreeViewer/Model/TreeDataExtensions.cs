@@ -171,7 +171,7 @@ namespace ACME.PRJ.PackageTreeViewer.Model
 		}
 
 		/// <summary>
-		/// Рекурсивное сравнение одноимённых узлов, слияние одинаковых узлов в один
+		/// Рекурсивное сравнение одноимённых узлов, слияние одинаковых узлов в один (beta)
 		/// </summary>
 		public static void MergeDiffNodes(this ObservableCollection<Node> tree
 			, ProgressObserver progressObserver = null, CancellationToken? token = null)
@@ -206,7 +206,7 @@ namespace ACME.PRJ.PackageTreeViewer.Model
 		}
 
 		/// <summary>
-		/// Рекурсивное сравнение одноимённых узлов, слияние одинаковых узлов в один
+		/// Рекурсивное сравнение одноимённых узлов, слияние одинаковых узлов в один (beta)
 		/// </summary>
 		/// <param name="orderedNodes">Список сравниваемых узлов (ожидается что узлы в нём уже отсортированы по имени)</param>
 		/// <param name="isOrigin">Функция проверки узла на версию (origin/toCompare)</param>
@@ -384,7 +384,7 @@ namespace ACME.PRJ.PackageTreeViewer.Model
 		}
 
 		/// <summary>
-		/// Помечаем указанный узел Appeared/Disappeared и все дочерние, что их предок Appeared/Disappeared
+		/// Помечаем указанный узел Appeared/Disappeared и все дочерние, что их предок Appeared/Disappeared (beta)
 		/// </summary>
 		private static void MarkNodeAndChildren(Node node, DiffStates newDiffState, bool isNodeOrigin, CancellationToken? token = null)
 		{

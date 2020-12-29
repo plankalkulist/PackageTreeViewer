@@ -17,8 +17,8 @@ namespace ACME.PRJ.PackageTreeViewer
 			{
 				if (_codebaseService == null)
 				{
-					//var instance = new BitbucketService((string)ctorParams[0]);
-                    var instance = new CodebaseServiceStub();
+                    var instance = new BitbucketService((string)ctorParams[0]);
+                    //var instance = new CodebaseServiceStub();
                     _codebaseService = instance;
 					return (T)_codebaseService;
 				}

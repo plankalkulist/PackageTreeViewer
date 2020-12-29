@@ -21,16 +21,16 @@ namespace ACME.PRJ.PackageTreeViewer.ViewModel
 		/// Игнорируемые проекты
 		/// </summary>
         public static HashSet<string> ProjectsToIgnoreKeys { get; private set; }
-            = new HashSet<string>()
+            = new HashSet<string>() // пример заполнения
             {
-				"GPS" // Guidewire
+                "GPS" // нет солюшенов C#
 			};
 
 		/// <summary>
 		/// Игнорируемые репы
 		/// </summary>
         public static HashSet<(string, string)> ReposToIgnoreKeys { get; private set; }
-            = new HashSet<(string, string)>()
+            = new HashSet<(string, string)>() // пример заполнения
             {
 				("BAZ", "BAZ_doc"), // там нет солюшенов и не предвидется
 				("BAZ", "BAZ_service"), // ничего особо интересного
@@ -54,9 +54,9 @@ namespace ACME.PRJ.PackageTreeViewer.ViewModel
                 [typeof(Exception)] = "/Resources/StatusCriticalError_16x.png"
 			};
 
-		/// <summary>
-		/// Древо жизни
-		/// </summary>
+        /// <summary>
+        /// Дерево отображаемых проектов (= совокупностей репозиториев, собираемых(build) и разворачиваемых(deploy) вместе) и их содержимого вплоть до ссылок в файлах проектов C# (.csproj)
+        /// </summary>
         public ObservableCollection<Node> Tree { get; private set; }
 
 		/// <summary>
@@ -295,7 +295,7 @@ namespace ACME.PRJ.PackageTreeViewer.ViewModel
 			{
 				return _updateSolutionsData
 						?? (_updateSolutionsData = new RelayCommand(
-							p => true, p => UpdateSolutionsData())); // await здесь не нужен
+							p => true, p => UpdateSolutionsData())); // await здесь не нужен!
 			}
 		}
 		private ICommand _updateSolutionsData;
@@ -438,7 +438,6 @@ namespace ACME.PRJ.PackageTreeViewer.ViewModel
 		/// Обновление узлов солюшенов
 		/// </summary>
 		private async Task UpdateSolutionsData()
-		//private void UpdateSolutionsData()
 		{
 			int reposToUpdateBranchCount = _treeDataService.CountReposToChangeBranch(ReposToIgnoreKeys);
 			if (reposToUpdateBranchCount == 0)
@@ -491,7 +490,7 @@ namespace ACME.PRJ.PackageTreeViewer.ViewModel
 							TreeLoadingProgressPercentage = (double)observerInstance.Counter / diffReposCount * 100d;
 						});
 
-					////////////////////
+					//////////////////// для отладки режима сравнения (beta)
 					Tree.ForEachNode(node =>
 					{
 						if (!(node.Data is ProjectInfo || node.Data is RepoInfo))

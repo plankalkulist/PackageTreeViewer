@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ACME.PRJ.CodebaseCommons;
 
 namespace ACME.PRJ.CSharpTools
 {
-	/// <summary>
-	/// Контейнер с инфой о солюшене
-	/// </summary>
-	public class CsSolution
+    /// <summary>
+    /// Контейнер с инфой о солюшене
+    /// </summary>
+    public class CsSolution
 	{
 		public CsSolutionFile Data { get; }
 
 		public IEnumerable<CsProjectFile> ProjectsData { get; }
 
 		public string Name => Data.SolutionFileInfo.Name;
-
-		//public RepoInfo RepoInfo => Data.SolutionFileInfo.Branch.Repo;
 
 		public CsSolution(CsSolutionFile solutionFileData, IEnumerable<CsProjectFile> projectsData)
 		{
